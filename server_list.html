@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="fa" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لیست سرورها</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3b82f6;
+      --primary-hover: #60a5fa;
+      --background: #000000;
+      --card-bg: rgba(10, 10, 10, 0.7);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --success-color: #22c55e;
+      --hover-bg: rgba(26, 26, 26, 0.5);
+      --header-bg: rgba(10, 10, 10, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      direction: rtl;
+      background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 2rem;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px var(--glass-shadow);
+    }
+
+    .service-filter {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px var(--glass-shadow);
+    }
+
+    .service-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--glass-border);
+      border-radius: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: currentColor;
+      opacity: 0.1;
+      transition: opacity 0.2s;
+    }
+
+    .service-btn:hover::before {
+      opacity: 0.2;
+    }
+
+    .service-btn.active {
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+
+    .service-btn.active::before {
+      opacity: 0.15;
+    }
+
+    h2 {
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 1.75rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-container {
+      margin-bottom: 1.5rem;
+    }
+
+    .search-input {
+      width: 100%;
+      max-width: 400px;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--glass-border);
+      border-radius: 0.5rem;
+      font-family: inherit;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .table-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px var(--glass-shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .table-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+      );
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: right;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: var(--hover-bg);
+    }
+
+    .copy-btn {
+      padding: 0.5rem 1rem;
+      background: rgba(59, 130, 246, 0.2);
+      color: white;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .copy-btn:hover {
+      background: rgba(59, 130, 246, 0.3);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    }
+
+    .copy-btn:active {
+      transform: translateY(0);
+    }
+
+    .copy-btn.copied {
+      background: rgba(34, 197, 94, 0.2);
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .status-yes {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .status-no {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .status-dash {
+      background: rgba(148, 163, 184, 0.1);
+      color: var(--text-secondary);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .service-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .service-badge.geflix {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--primary-color);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .service-badge.other {
+      background: rgba(107, 114, 128, 0.1);
+      color: var(--text-secondary);
+      border: 1px solid rgba(107, 114, 128, 0.2);
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        padding: 0 1rem;
+      }
+
+      .header {
+        padding: 0.75rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .service-filter {
+        padding: 0.75rem;
+        gap: 0.5rem;
+      }
+
+      .service-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.875rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 0.5rem;
+      }
+
+      .container {
+        padding: 0;
+      }
+
+      .header {
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+      }
+
+      .service-filter {
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 1rem;
+      }
+
+      .service-btn {
+        flex: 1;
+        min-width: 120px;
+        text-align: center;
+      }
+
+      .search-container {
+        margin-bottom: 1rem;
+      }
+
+      .search-input {
+        max-width: 100%;
+      }
+
+      .table-container {
+        border-radius: 0.5rem;
+        margin: 0 -0.5rem;
+      }
+
+      table {
+        min-width: 600px;
+      }
+
+      th, td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.875rem;
+      }
+
+      .copy-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
+      }
+
+      .service-badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        padding: 0.5rem;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+      }
+
+      .service-btn {
+        min-width: 100px;
+        font-size: 0.75rem;
+        padding: 0.3rem 0.5rem;
+      }
+
+      .search-input {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+      }
+
+      th, td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.75rem;
+      }
+
+      .copy-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.7rem;
+      }
+
+      .service-badge {
+        font-size: 0.65rem;
+        padding: 0.15rem 0.4rem;
+      }
+
+      .toast {
+        font-size: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        bottom: 1rem;
+      }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: var(--text-primary);
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 6px var(--glass-shadow);
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    /* Add horizontal scroll indicator for mobile */
+    .table-container {
+      position: relative;
+    }
+
+    .table-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 30px;
+      background: linear-gradient(to right, transparent, var(--card-bg));
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    @media (max-width: 768px) {
+      .table-container::after {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>لیست سرورهای VPN</h2>
+    </div>
+
+    <div class="service-filter" id="serviceFilter">
+      <!-- Service buttons will be dynamically inserted here -->
+    </div>
+
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="جستجو در سرورها..." id="searchInput">
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>سرویس</th>
+            <th>کشور</th>
+            <th>شهر</th>
+            <th>آدرس سرور</th>
+            <th>عملیات</th>
+          </tr>
+        </thead>
+        <tbody id="serverTableBody">
+          <!-- Server rows will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let serverData = [];
+    let servicesData = {};
+
+    // Load server data from JSON file
+    async function loadServerData() {
+      try {
+        const response = await fetch('servers.json');
+        const data = await response.json();
+        serverData = data.servers;
+        servicesData = data.services;
+        
+        // Initialize service filters
+        initializeServiceFilters();
+        // Render initial table
+        renderServerTable();
+      } catch (error) {
+        console.error('Error loading server data:', error);
+        showToast('خطا در بارگذاری اطلاعات سرورها', 'error');
+      }
+    }
+
+    // Initialize service filters
+    function initializeServiceFilters() {
+      const filterContainer = document.getElementById('serviceFilter');
+      
+      // Add "All" button
+      const allButton = document.createElement('button');
+      allButton.className = 'service-btn active';
+      allButton.dataset.service = 'all';
+      allButton.textContent = 'همه سرورها';
+      allButton.style.color = 'var(--text-primary)';
+      filterContainer.appendChild(allButton);
+
+      // Add service buttons
+      Object.entries(servicesData).forEach(([serviceId, service]) => {
+        const button = document.createElement('button');
+        button.className = 'service-btn';
+        button.dataset.service = serviceId;
+        button.textContent = service.name.fa;
+        button.style.color = service.color;
+        filterContainer.appendChild(button);
+      });
+
+      // Add click handlers
+      filterContainer.querySelectorAll('.service-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          filterContainer.querySelectorAll('.service-btn').forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          filterServers(button.dataset.service);
+        });
+      });
+    }
+
+    // Render server table with data
+    function renderServerTable(filteredData = null) {
+      const tableBody = document.getElementById('serverTableBody');
+      const data = filteredData || serverData;
+      
+      tableBody.innerHTML = data.map(server => {
+        const service = servicesData[server.service];
+        return `
+          <tr data-service="${server.service}">
+            <td>
+              <span class="service-badge" style="background: ${service.color}20; color: ${service.color}; border-color: ${service.color}40">
+                ${service.name.fa}
+              </span>
+            </td>
+            <td>${server.country.fa}</td>
+            <td>${server.city.fa}</td>
+            <td id="${server.id}">${server.address}</td>
+            <td>
+              <button class="copy-btn" onclick="copyToClipboard('${server.id}')">
+                <span>کپی</span>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Filter servers by service and search text
+    function filterServers(service) {
+      const searchText = document.getElementById('searchInput').value.toLowerCase();
+      const filteredData = serverData.filter(server => {
+        const matchesService = service === 'all' || server.service === service;
+        const matchesSearch = searchText === '' || 
+          server.country.fa.toLowerCase().includes(searchText) ||
+          server.city.fa.toLowerCase().includes(searchText) ||
+          server.address.toLowerCase().includes(searchText);
+        
+        return matchesService && matchesSearch;
+      });
+      
+      renderServerTable(filteredData);
+    }
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', function() {
+      const activeService = document.querySelector('.service-btn.active').dataset.service;
+      filterServers(activeService);
+    });
+
+    // Modern copy to clipboard with toast notification
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      const button = document.querySelector(`button[onclick="copyToClipboard('${elementId}')"]`);
+      
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`آدرس کپی شد: ${text}`);
+        
+        button.classList.add('copied');
+        button.innerHTML = '<span>کپی شد!</span>';
+        
+        setTimeout(() => {
+          button.classList.remove('copied');
+          button.innerHTML = '<span>کپی</span>';
+        }, 2000);
+      }).catch(err => {
+        console.error(err);
+        showToast('خطا در کپی کردن آدرس', 'error');
+      });
+    }
+
+    // Toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    // Initialize the page
+    loadServerData();
+  </script>
+</body>
+</html>
