@@ -7,26 +7,23 @@
       },
       "color": "#3b82f6"
     },
-    "express": {
-      "name": {
-        "en": "ExpressVPN",
-        "fa": "ExpressVPN"
-      },
-      "color": "#ef4444"
-    },
-    "nord": {
-      "name": {
-        "en": "NordVPN",
-        "fa": "NordVPN"
-      },
-      "color": "#10b981"
-    },
     "private": {
       "name": {
         "en": "Private VPN",
         "fa": "Private VPN"
       },
       "color": "#8b5cf6"
+    },
+    "freevpn724": {
+      "name": {
+        "en": "FreeVPN724",
+        "fa": "FreeVPN724"
+      },
+      "color": "#f59e0b",
+      "credentials": {
+        "username": "freevpn724",
+        "password": "u288v9xrua"
+      }
     }
   },
   "servers": [
@@ -1628,6 +1625,71 @@
         "fa": "هوشی مین"
       },
       "address": "vn-hoc.pvdata.host"
+    },
+    {
+      "id": "freevpn724-us",
+      "service": "freevpn724",
+      "country": {
+        "en": "United States",
+        "fa": "آمریکا"
+      },
+      "city": {
+        "en": "United States",
+        "fa": "آمریکا"
+      },
+      "address": "us1.freevpn724.com"
+    },
+    {
+      "id": "freevpn724-nl",
+      "service": "freevpn724",
+      "country": {
+        "en": "Netherlands",
+        "fa": "هلند"
+      },
+      "city": {
+        "en": "Netherlands",
+        "fa": "هلند"
+      },
+      "address": "nl1.freevpn724.com"
+    },
+    {
+      "id": "freevpn724-ch",
+      "service": "freevpn724",
+      "country": {
+        "en": "Switzerland",
+        "fa": "سوئیس"
+      },
+      "city": {
+        "en": "Switzerland",
+        "fa": "سوئیس"
+      },
+      "address": "ch1.freevpn724.com"
+    },
+    {
+      "id": "freevpn724-sg",
+      "service": "freevpn724",
+      "country": {
+        "en": "Singapore",
+        "fa": "سنگاپور"
+      },
+      "city": {
+        "en": "Singapore",
+        "fa": "سنگاپور"
+      },
+      "address": "sg1.freevpn724.com"
+    },
+    {
+      "id": "freevpn724-cz",
+      "service": "freevpn724",
+      "country": {
+        "en": "Czech Republic",
+        "fa": "جمهوری چک"
+      },
+      "city": {
+        "en": "Czech Republic",
+        "fa": "جمهوری چک"
+      },
+      "address": "cz1.freevpn724.com"
     }
   ]
 } 
