@@ -470,6 +470,31 @@
         opacity: 1;
       }
     }
+
+    .credentials {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .credentials div {
+      margin-bottom: 0.25rem;
+    }
+
+    .credentials div:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Add styles for copyable text */
+    .copyable {
+      cursor: pointer;
+      color: var(--primary-color);
+      transition: opacity 0.2s;
+    }
+
+    .copyable:hover {
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
@@ -494,6 +519,7 @@
             <th>کشور</th>
             <th>شهر</th>
             <th>آدرس سرور</th>
+            <th>اطلاعات ورود</th>
             <th>عملیات</th>
           </tr>
         </thead>
@@ -567,6 +593,12 @@
       
       tableBody.innerHTML = data.map(server => {
         const service = servicesData[server.service];
+        const credentials = service.credentials ? 
+          `<div class="credentials">
+            <div>نام کاربری: <span class="copyable" onclick="copyToClipboard(this.textContent)">${service.credentials.username}</span></div>
+            <div>رمز عبور: <span class="copyable" onclick="copyToClipboard(this.textContent)">${service.credentials.password}</span></div>
+          </div>` : '-';
+        
         return `
           <tr data-service="${server.service}">
             <td>
@@ -577,9 +609,10 @@
             <td>${server.country.fa}</td>
             <td>${server.city.fa}</td>
             <td id="${server.id}">${server.address}</td>
+            <td>${credentials}</td>
             <td>
-              <button class="copy-btn" onclick="copyToClipboard('${server.id}')">
-                <span>کپی</span>
+              <button class="copy-btn" onclick="copyServerAddress('${server.id}')">
+                <span>کپی آدرس</span>
               </button>
             </td>
           </tr>
@@ -610,24 +643,34 @@
       filterServers(activeService);
     });
 
-    // Modern copy to clipboard with toast notification
-    function copyToClipboard(elementId) {
+    // Copy server address with button
+    function copyServerAddress(elementId) {
       const text = document.getElementById(elementId).innerText;
-      const button = document.querySelector(`button[onclick="copyToClipboard('${elementId}')"]`);
+      const button = document.querySelector(`button[onclick="copyServerAddress('${elementId}')"]`);
       
       navigator.clipboard.writeText(text).then(() => {
-        showToast(`آدرس کپی شد: ${text}`);
+        showToast(`آدرس سرور کپی شد: ${text}`);
         
         button.classList.add('copied');
         button.innerHTML = '<span>کپی شد!</span>';
         
         setTimeout(() => {
           button.classList.remove('copied');
-          button.innerHTML = '<span>کپی</span>';
+          button.innerHTML = '<span>کپی آدرس</span>';
         }, 2000);
       }).catch(err => {
         console.error(err);
         showToast('خطا در کپی کردن آدرس', 'error');
+      });
+    }
+
+    // Copy text (for credentials)
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`متن کپی شد: ${text}`);
+      }).catch(err => {
+        console.error(err);
+        showToast('خطا در کپی کردن متن', 'error');
       });
     }
 
