@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="fa" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta name="robots" content="noindex, nofollow">
+  <title>آموزش اتصال به VPN</title>
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/dana-font/dist/dana-font.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3b82f6;
+      --primary-hover: #60a5fa;
+      --background: #000000;
+      --card-bg: rgba(10, 10, 10, 0.7);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --success-color: #22c55e;
+      --hover-bg: rgba(26, 26, 26, 0.5);
+      --header-bg: rgba(10, 10, 10, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'dana', sans-serif;
+      direction: rtl;
+      background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 2rem;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px var(--glass-shadow);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px var(--glass-shadow);
+    }
+
+    .nav-tab {
+      padding: 0.5rem 1rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .nav-tab:hover {
+      background: var(--hover-bg);
+    }
+
+    .nav-tab.active {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px var(--glass-shadow);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'dana', sans-serif;
+      font-weight: 600;
+    }
+
+    .header h2 {
+      font-family: 'dana', sans-serif;
+      font-weight: 600;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .step {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 0.5rem;
+      border: 1px solid var(--glass-border);
+    }
+
+    .step-number {
+      display: inline-block;
+      width: 2rem;
+      height: 2rem;
+      line-height: 2rem;
+      text-align: center;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      margin-left: 0.5rem;
+      font-weight: 600;
+    }
+
+    .step-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .step-content {
+      color: var(--text-secondary);
+    }
+
+    .note {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .image-container {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      border-radius: 0.5rem;
+      border: 1px solid var(--glass-border);
+    }
+
+    .image-caption {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+
+    .os-tabs {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      padding: 0.5rem;
+      background: var(--card-bg);
+      border-radius: 1rem;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 6px var(--glass-shadow);
+    }
+
+    .os-tabs::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .os-tabs::-webkit-scrollbar-track {
+      background: var(--card-bg);
+      border-radius: 2px;
+    }
+
+    .os-tabs::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 2px;
+    }
+
+    .os-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 0.5rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      font-size: 0.875rem;
+    }
+
+    .os-tab i {
+      font-size: 1.25rem;
+    }
+
+    .os-tab.windows i { color: #00a4ef; }
+    .os-tab.macos i { color: #a6b1b7; }
+    .os-tab.android i { color: #3ddc84; }
+    .os-tab.ios i { color: #000000; }
+    .os-tab.linux i { color: #fcc624; }
+
+    .os-tab:hover {
+      background: var(--hover-bg);
+      transform: translateY(-1px);
+    }
+
+    .os-tab.active {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+      color: white;
+    }
+
+    .os-tab.active i {
+      color: white !important;
+    }
+
+    .os-content {
+      display: none;
+    }
+
+    .os-content.active {
+      display: block;
+    }
+
+    .app-card {
+      background: var(--card-bg);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 6px var(--glass-shadow);
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px var(--glass-shadow);
+      border-color: var(--primary-color);
+    }
+
+    .app-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--primary-color);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .app-info h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .app-version {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      display: inline-block;
+    }
+
+    .app-description {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      flex: 1;
+    }
+
+    .app-features {
+      margin-bottom: 1.5rem;
+    }
+
+    .app-features h4 {
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+
+    .features-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .features-list li {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 0.5rem;
+      border: 1px solid var(--glass-border);
+    }
+
+    .features-list li i {
+      color: var(--primary-color);
+      font-size: 1rem;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--primary-color);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: all 0.3s;
+      width: 100%;
+      justify-content: center;
+      font-weight: 500;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .download-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    }
+
+    .download-btn i {
+      font-size: 1.25rem;
+    }
+
+    .video-container {
+      background: var(--card-bg);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 6px var(--glass-shadow);
+    }
+
+    .video-placeholder {
+      aspect-ratio: 16/9;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+    }
+
+    .video-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    .video-placeholder:hover img {
+      opacity: 0.9;
+    }
+
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 64px;
+      height: 64px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .play-button i {
+      color: white;
+      font-size: 24px;
+      margin-right: -4px;
+    }
+
+    .play-button:hover {
+      background: var(--primary-color);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .video-info {
+      margin-top: 1rem;
+    }
+
+    .video-info h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .video-info p {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--card-bg);
+      color: var(--text-primary);
+      padding: 1rem 2rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 6px var(--glass-shadow);
+      font-weight: 500;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-1rem);
+    }
+
+    .toast.error {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      .container {
+        padding: 0;
+      }
+
+      .header {
+        margin-bottom: 1rem;
+        padding: 1rem;
+      }
+
+      .nav-tabs {
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+      }
+
+      .os-tabs {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+      }
+
+      .os-tab {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+      }
+
+      .credentials-card {
+        margin-bottom: 1rem;
+        padding: 1rem;
+      }
+
+      .credential-item {
+        padding: 0.5rem;
+      }
+
+      .credential-item .label {
+        min-width: 80px;
+        font-size: 0.75rem;
+      }
+
+      .credential-item .value {
+        font-size: 0.75rem;
+      }
+
+      .video-container {
+        margin-bottom: 1rem;
+        padding: 1rem;
+      }
+
+      .video-info h3 {
+        font-size: 1.125rem;
+      }
+
+      .apps-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .app-card {
+        padding: 1rem;
+      }
+
+      .app-header {
+        margin-bottom: 0.75rem;
+      }
+
+      .app-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+
+      .app-info h3 {
+        font-size: 1rem;
+      }
+
+      .features-list li {
+        font-size: 0.75rem;
+        padding: 0.4rem;
+      }
+
+      .download-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.75rem;
+      }
+
+      .toast {
+        font-size: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>آموزش اتصال به VPN</h2>
+    </div>
+
+    <div class="nav-tabs">
+      <a href="server_list.html" class="nav-tab">لیست سرورها</a>
+      <a href="amozesh.html" class="nav-tab active">آموزش</a>
+    </div>
+
+    <div class="os-tabs">
+      <button class="os-tab active" data-os="windows">
+        <i class="ri-windows-fill"></i>
+        <span>ویندوز</span>
+      </button>
+      <button class="os-tab" data-os="macos">
+        <i class="ri-apple-fill"></i>
+        <span>مک</span>
+      </button>
+      <button class="os-tab" data-os="android">
+        <i class="ri-android-fill"></i>
+        <span>اندروید</span>
+      </button>
+      <button class="os-tab" data-os="ios">
+        <i class="ri-apple-fill"></i>
+        <span>آیفون</span>
+      </button>
+      <button class="os-tab" data-os="linux">
+        <i class="ri-ubuntu-fill"></i>
+        <span>لینوکس</span>
+      </button>
+    </div>
+
+    <div id="windows-content" class="os-content active">
+      <div class="apps-grid" id="windows-apps">
+        <!-- Windows apps will be loaded here -->
+      </div>
+      <div class="video-container">
+        <div class="video-placeholder" id="windows-video">
+          <img src="windows_thumb.jpg" alt="آموزش ویندوز" id="windows-thumbnail">
+          <div class="play-button">
+            <i class="ri-play-fill"></i>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 id="windows-video-title">آموزش اتصال VPN در ویندوز</h3>
+          <p id="windows-video-description">آموزش تصویری نحوه اتصال به VPN در ویندوز با استفاده از تنظیمات داخلی</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="macos-content" class="os-content">
+      <div class="apps-grid" id="macos-apps">
+        <!-- macOS apps will be loaded here -->
+      </div>
+      <div class="video-container">
+        <div class="video-placeholder" id="macos-video">
+          <img src="macos_thumb.jpg" alt="آموزش مک" id="macos-thumbnail">
+          <div class="play-button">
+            <i class="ri-play-fill"></i>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 id="macos-video-title">آموزش اتصال VPN در مک</h3>
+          <p id="macos-video-description">آموزش تصویری نحوه اتصال به VPN در سیستم عامل مک</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="android-content" class="os-content">
+      <div class="apps-grid" id="android-apps">
+        <!-- Android apps will be loaded here -->
+      </div>
+      <div class="video-container">
+        <div class="video-placeholder" id="android-video">
+          <img src="android_thumb.jpg" alt="آموزش اندروید" id="android-thumbnail">
+          <div class="play-button">
+            <i class="ri-play-fill"></i>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 id="android-video-title">آموزش اتصال VPN در اندروید</h3>
+          <p id="android-video-description">آموزش تصویری نحوه اتصال به VPN در سیستم عامل اندروید</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="ios-content" class="os-content">
+      <div class="apps-grid" id="ios-apps">
+        <!-- iOS apps will be loaded here -->
+      </div>
+      <div class="video-container">
+        <div class="video-placeholder" id="ios-video">
+          <img src="ios_thumb.jpg" alt="آموزش آیفون" id="ios-thumbnail">
+          <div class="play-button">
+            <i class="ri-play-fill"></i>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 id="ios-video-title">آموزش اتصال VPN در آیفون</h3>
+          <p id="ios-video-description">آموزش تصویری نحوه اتصال به VPN در سیستم عامل iOS</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="linux-content" class="os-content">
+      <div class="apps-grid" id="linux-apps">
+        <!-- Linux apps will be loaded here -->
+      </div>
+      <div class="video-container">
+        <div class="video-placeholder" id="linux-video">
+          <img src="linux_thumb.jpg" alt="آموزش لینوکس" id="linux-thumbnail">
+          <div class="play-button">
+            <i class="ri-play-fill"></i>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 id="linux-video-title">آموزش اتصال VPN در لینوکس</h3>
+          <p id="linux-video-description">آموزش تصویری نحوه اتصال به VPN در سیستم عامل لینوکس</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let tutorialData = null;
+    let lastCopyTime = 0;
+    const COPY_COOLDOWN = 1000;
+
+    // Load tutorial data
+    async function loadTutorialData() {
+      try {
+        const response = await fetch('tutorial_data.json');
+        tutorialData = await response.json();
+        initializeTutorial();
+      } catch (error) {
+        console.error('Error loading tutorial data:', error);
+        showToast('خطا در بارگذاری اطلاعات آموزشی', 'error');
+      }
+    }
+
+    // Initialize tutorial content
+    function initializeTutorial() {
+      // Initialize OS tabs
+      document.querySelectorAll('.os-tab').forEach(tab => {
+        tab.addEventListener('click', () => switchOS(tab.dataset.os));
+      });
+
+      // Load content for each OS
+      Object.keys(tutorialData.videos).forEach(os => {
+        loadOSContent(os);
+      });
+
+      // Initialize copy functionality
+      initializeCopyButtons();
+    }
+
+    // Switch between OS tabs
+    function switchOS(os) {
+      // Update active tab
+      document.querySelectorAll('.os-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.os === os);
+      });
+
+      // Update active content
+      document.querySelectorAll('.os-content').forEach(content => {
+        content.classList.toggle('active', content.id === `${os}-content`);
+      });
+
+      // Update credentials
+      updateCredentials(os);
+    }
+
+    // Load content for specific OS
+    function loadOSContent(os) {
+      const content = document.getElementById(`${os}-content`);
+      const videoData = tutorialData.videos[os];
+      const appsData = tutorialData.applications[os];
+
+      // Load video content
+      if (videoData) {
+        const videoContainer = content.querySelector('.video-container') || createVideoContainer(os);
+        updateVideoContent(videoContainer, videoData);
+      }
+
+      // Load apps content
+      if (appsData) {
+        const appsGrid = content.querySelector('.apps-grid') || createAppsGrid(os);
+        updateAppsContent(appsGrid, appsData);
+      }
+    }
+
+    // Create video container
+    function createVideoContainer(os) {
+      const container = document.createElement('div');
+      container.className = 'video-container';
+      container.innerHTML = `
+        <div class="video-placeholder" id="${os}-video">
+          <img src="${os}_thumb.jpg" alt="آموزش ${os}" id="${os}-thumbnail">
+          <div class="play-button">
+            <i class="ri-play-fill"></i>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 id="${os}-video-title"></h3>
+          <p id="${os}-video-description"></p>
+        </div>
+      `;
+      document.getElementById(`${os}-content`).appendChild(container);
+      return container;
+    }
+
+    // Update video content
+    function updateVideoContent(container, videoData) {
+      const title = container.querySelector('h3');
+      const description = container.querySelector('p');
+      const placeholder = container.querySelector('.video-placeholder');
+      const thumbnail = container.querySelector('img');
+
+      title.textContent = videoData.title;
+      description.textContent = videoData.description;
+      thumbnail.src = videoData.thumbnail;
+      thumbnail.alt = videoData.title;
+
+      placeholder.onclick = () => {
+        if (videoData.url) {
+          window.open(videoData.url, '_blank');
+        }
+      };
+    }
+
+    // Create apps grid
+    function createAppsGrid(os) {
+      const grid = document.createElement('div');
+      grid.className = 'apps-grid';
+      grid.id = `${os}-apps`;
+      document.getElementById(`${os}-content`).appendChild(grid);
+      return grid;
+    }
+
+    // Update apps content
+    function updateAppsContent(grid, appsData) {
+      grid.innerHTML = appsData.map(app => `
+        <div class="app-card">
+          <div class="app-header">
+            <div class="app-icon">
+              <i class="ri-${app.icon}-fill"></i>
+            </div>
+            <div class="app-info">
+              <h3>${app.name}</h3>
+              <span class="app-version">نسخه ${app.version}</span>
+            </div>
+          </div>
+          <p class="app-description">${app.description}</p>
+          <div class="app-features">
+            <h4>ویژگی‌ها:</h4>
+            <ul class="features-list">
+              ${app.features.map(feature => `
+                <li><i class="ri-check-line"></i>${feature}</li>
+              `).join('')}
+            </ul>
+          </div>
+          <a href="${app.download_url}" class="download-btn" target="_blank">
+            <i class="ri-download-2-line"></i>
+            دانلود
+          </a>
+        </div>
+      `).join('');
+    }
+
+    // Update credentials based on OS
+    function updateCredentials(os) {
+      // Removed credentials update function
+    }
+
+    // Initialize copy buttons
+    function initializeCopyButtons() {
+      document.querySelectorAll('.copyable').forEach(element => {
+        element.addEventListener('click', () => {
+          if (!canCopy()) return;
+          
+          const text = element.dataset.value;
+          navigator.clipboard.writeText(text).then(() => {
+            showToast('اطلاعات کپی شد');
+            element.classList.add('copied');
+            setTimeout(() => element.classList.remove('copied'), 1000);
+          }).catch(err => {
+            console.error(err);
+            showToast('خطا در کپی کردن متن', 'error');
+          });
+        });
+      });
+    }
+
+    // Check if can copy (rate limiting)
+    function canCopy() {
+      const now = Date.now();
+      if (now - lastCopyTime < COPY_COOLDOWN) {
+        showToast('لطفاً کمی صبر کنید...', 'error');
+        return false;
+      }
+      lastCopyTime = now;
+      return true;
+    }
+
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    // Initialize the page
+    loadTutorialData();
+  </script>
+</body>
+</html> 

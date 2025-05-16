@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta name="robots" content="noindex, nofollow">
   <title>لیست سرورها</title>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/dana-font/dist/dana-font.css" rel="stylesheet" type="text/css" />
   <style>
     :root {
       --primary-color: #3b82f6;
@@ -28,7 +34,7 @@
     }
 
     body {
-      font-family: 'Vazirmatn', sans-serif;
+      font-family: 'dana', sans-serif;
       direction: rtl;
       background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
       color: var(--text-primary);
@@ -70,6 +76,36 @@
       border: 1px solid var(--glass-border);
       border-radius: 1rem;
       box-shadow: 0 4px 6px var(--glass-shadow);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px var(--glass-shadow);
+    }
+
+    .nav-tab {
+      padding: 0.5rem 1rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .nav-tab:hover {
+      background: var(--hover-bg);
+    }
+
+    .nav-tab.active {
+      background: var(--primary-color);
+      color: white;
     }
 
     .service-filter {
@@ -380,6 +416,17 @@
         font-size: 0.7rem;
         padding: 0.2rem 0.5rem;
       }
+
+      .nav-tabs {
+        padding: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .nav-tab {
+        flex: 1;
+        text-align: center;
+        font-size: 0.875rem;
+      }
     }
 
     @media (max-width: 480px) {
@@ -503,6 +550,11 @@
       <h2>لیست سرورهای VPN</h2>
     </div>
 
+    <div class="nav-tabs">
+      <a href="server_list.html" class="nav-tab active">لیست سرورها</a>
+      <a href="amozesh.html" class="nav-tab">آموزش</a>
+    </div>
+
     <div class="service-filter" id="serviceFilter">
       <!-- Service buttons will be dynamically inserted here -->
     </div>
@@ -535,6 +587,20 @@
   <script>
     let serverData = [];
     let servicesData = {};
+
+    // Add rate limiting for copy operations
+    let lastCopyTime = 0;
+    const COPY_COOLDOWN = 1000; // 1 second cooldown
+
+    function canCopy() {
+      const now = Date.now();
+      if (now - lastCopyTime < COPY_COOLDOWN) {
+        showToast('لطفاً کمی صبر کنید...', 'error');
+        return false;
+      }
+      lastCopyTime = now;
+      return true;
+    }
 
     // Load server data from JSON file
     async function loadServerData() {
@@ -639,17 +705,23 @@
     // Search functionality
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', function() {
+      const sanitizedValue = sanitizeInput(this.value);
+      if (sanitizedValue !== this.value) {
+        this.value = sanitizedValue;
+      }
       const activeService = document.querySelector('.service-btn.active').dataset.service;
       filterServers(activeService);
     });
 
-    // Copy server address with button
+    // Update copy functions with rate limiting
     function copyServerAddress(elementId) {
+      if (!canCopy()) return;
+      
       const text = document.getElementById(elementId).innerText;
       const button = document.querySelector(`button[onclick="copyServerAddress('${elementId}')"]`);
       
       navigator.clipboard.writeText(text).then(() => {
-        showToast(`آدرس سرور کپی شد: ${text}`);
+        showToast(`آدرس سرور کپی شد`);
         
         button.classList.add('copied');
         button.innerHTML = '<span>کپی شد!</span>';
@@ -666,12 +738,19 @@
 
     // Copy text (for credentials)
     function copyToClipboard(text) {
+      if (!canCopy()) return;
+      
       navigator.clipboard.writeText(text).then(() => {
-        showToast(`متن کپی شد: ${text}`);
+        showToast('اطلاعات کپی شد');
       }).catch(err => {
         console.error(err);
         showToast('خطا در کپی کردن متن', 'error');
       });
+    }
+
+    // Add input sanitization for search
+    function sanitizeInput(input) {
+      return input.replace(/[<>]/g, '');
     }
 
     // Toast notification

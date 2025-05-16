@@ -1,0 +1,189 @@
+{
+  "videos": {
+    "windows": {
+      "title": "آموزش اتصال VPN در ویندوز",
+      "description": "آموزش تصویری نحوه اتصال به VPN در ویندوز با استفاده از تنظیمات داخلی",
+      "url": "YOUR_WINDOWS_VIDEO_URL",
+      "thumbnail": "windows_thumb.jpg"
+    },
+    "macos": {
+      "title": "آموزش اتصال VPN در مک",
+      "description": "آموزش تصویری نحوه اتصال به VPN در سیستم عامل مک",
+      "url": "YOUR_MACOS_VIDEO_URL",
+      "thumbnail": "macos_thumb.jpg"
+    },
+    "android": {
+      "title": "آموزش اتصال VPN در اندروید",
+      "description": "آموزش تصویری نحوه اتصال به VPN در اندروید با استفاده از OpenVPN",
+      "url": "YOUR_ANDROID_VIDEO_URL",
+      "thumbnail": "android_thumb.jpg"
+    },
+    "ios": {
+      "title": "آموزش اتصال VPN در آیفون",
+      "description": "آموزش تصویری نحوه اتصال به VPN در iOS با استفاده از تنظیمات داخلی",
+      "url": "YOUR_IOS_VIDEO_URL",
+      "thumbnail": "ios_thumb.jpg"
+    },
+    "linux": {
+      "title": "آموزش اتصال VPN در لینوکس",
+      "description": "آموزش تصویری نحوه اتصال به VPN در لینوکس با استفاده از NetworkManager",
+      "url": "YOUR_LINUX_VIDEO_URL",
+      "thumbnail": "linux_thumb.jpg"
+    }
+  },
+  "applications": {
+    "windows": [
+      {
+        "name": "OpenVPN GUI",
+        "description": "نرم‌افزار رسمی OpenVPN برای ویندوز با رابط کاربری گرافیکی",
+        "icon": "openvpn",
+        "download_url": "https://openvpn.net/community-downloads/",
+        "version": "2.6.5",
+        "features": [
+          "رابط کاربری گرافیکی",
+          "پشتیبانی از تمام پروتکل‌های OpenVPN",
+          "امکان ذخیره چندین پروفایل",
+          "امکان تنظیم خودکار اتصال"
+        ]
+      },
+      {
+        "name": "SoftEther VPN Client",
+        "description": "کلاینت VPN چند پروتکلی با پشتیبانی از پروتکل‌های مختلف",
+        "icon": "softether",
+        "download_url": "https://www.softether.org/5-download",
+        "version": "4.42",
+        "features": [
+          "پشتیبانی از چندین پروتکل VPN",
+          "امکان تغییر پروتکل",
+          "رابط کاربری ساده",
+          "پشتیبانی از اتصال خودکار"
+        ]
+      },
+      {
+        "name": "WireGuard",
+        "description": "کلاینت رسمی WireGuard برای ویندوز",
+        "icon": "wireguard",
+        "download_url": "https://download.wireguard.com/windows-client/wireguard-installer.exe",
+        "version": "0.5.3",
+        "features": [
+          "سریع‌ترین پروتکل VPN",
+          "امنیت بالا",
+          "رابط کاربری ساده",
+          "مصرف کم منابع"
+        ]
+      }
+    ],
+    "macos": [
+      {
+        "name": "Tunnelblick",
+        "description": "کلاینت OpenVPN برای مک با رابط کاربری گرافیکی",
+        "icon": "tunnelblick",
+        "download_url": "https://tunnelblick.net/downloads.html",
+        "version": "3.8.8",
+        "features": [
+          "رابط کاربری گرافیکی",
+          "پشتیبانی از OpenVPN",
+          "امکان مدیریت چندین پروفایل",
+          "امکان تنظیم خودکار اتصال"
+        ]
+      },
+      {
+        "name": "WireGuard",
+        "description": "کلاینت رسمی WireGuard برای مک",
+        "icon": "wireguard",
+        "download_url": "https://apps.apple.com/us/app/wireguard/id1451685025",
+        "version": "1.0.16",
+        "features": [
+          "سریع‌ترین پروتکل VPN",
+          "امنیت بالا",
+          "رابط کاربری ساده",
+          "مصرف کم منابع"
+        ]
+      }
+    ],
+    "android": [
+      {
+        "name": "OpenVPN for Android",
+        "description": "کلاینت رسمی OpenVPN برای اندروید",
+        "icon": "openvpn",
+        "download_url": "https://play.google.com/store/apps/details?id=de.blinkt.openvpn",
+        "version": "0.7.8",
+        "features": [
+          "رابط کاربری ساده",
+          "پشتیبانی از تمام پروتکل‌های OpenVPN",
+          "امکان ذخیره چندین پروفایل",
+          "امکان تنظیم خودکار اتصال"
+        ]
+      },
+      {
+        "name": "WireGuard",
+        "description": "کلاینت رسمی WireGuard برای اندروید",
+        "icon": "wireguard",
+        "download_url": "https://play.google.com/store/apps/details?id=com.wireguard.android",
+        "version": "1.0.20211029",
+        "features": [
+          "سریع‌ترین پروتکل VPN",
+          "امنیت بالا",
+          "رابط کاربری ساده",
+          "مصرف کم باتری"
+        ]
+      }
+    ],
+    "ios": [
+      {
+        "name": "OpenVPN Connect",
+        "description": "کلاینت رسمی OpenVPN برای iOS",
+        "icon": "openvpn",
+        "download_url": "https://apps.apple.com/us/app/openvpn-connect/id590379981",
+        "version": "3.3.1",
+        "features": [
+          "رابط کاربری ساده",
+          "پشتیبانی از تمام پروتکل‌های OpenVPN",
+          "امکان ذخیره چندین پروفایل",
+          "امکان تنظیم خودکار اتصال"
+        ]
+      },
+      {
+        "name": "WireGuard",
+        "description": "کلاینت رسمی WireGuard برای iOS",
+        "icon": "wireguard",
+        "download_url": "https://apps.apple.com/us/app/wireguard/id1441195209",
+        "version": "1.0.16",
+        "features": [
+          "سریع‌ترین پروتکل VPN",
+          "امنیت بالا",
+          "رابط کاربری ساده",
+          "مصرف کم باتری"
+        ]
+      }
+    ],
+    "linux": [
+      {
+        "name": "NetworkManager OpenVPN",
+        "description": "پلاگین OpenVPN برای NetworkManager",
+        "icon": "networkmanager",
+        "download_url": "https://gitlab.gnome.org/GNOME/network-manager-openvpn",
+        "version": "1.10.0",
+        "features": [
+          "ادغام با NetworkManager",
+          "پشتیبانی از تمام پروتکل‌های OpenVPN",
+          "رابط کاربری گرافیکی",
+          "امکان تنظیم خودکار اتصال"
+        ]
+      },
+      {
+        "name": "WireGuard",
+        "description": "کلاینت رسمی WireGuard برای لینوکس",
+        "icon": "wireguard",
+        "download_url": "https://www.wireguard.com/install/",
+        "version": "1.0.20210914",
+        "features": [
+          "سریع‌ترین پروتکل VPN",
+          "امنیت بالا",
+          "رابط کاربری ساده",
+          "مصرف کم منابع"
+        ]
+      }
+    ]
+  }
+} 
